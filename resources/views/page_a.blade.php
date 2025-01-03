@@ -9,6 +9,14 @@
                     <div class="card-header">Page A</div>
 
                     <div class="card-body">
+                        <div>
+                            @if (session('result'))
+                                <div class="alert alert-success">{{ session('result') }}: {{ session('winAmount') }}</div>
+                            @endif
+                            @if (session('linkGenerated'))
+                                <div class="alert alert-success">{{ session('linkGenerated') }}</div>
+                            @endif
+                        </div>
                        <div class="d-flex justify-content-between">
                            <div class="d-flex">
                                <div>

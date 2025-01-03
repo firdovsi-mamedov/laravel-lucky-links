@@ -14,11 +14,10 @@
                         </div>
                     @endif
 
-                    <p>
-                        <a href="{{ route('page.a', ['token' => $link->token]) }}">Unique Url</a>
-                    </p>
+                    <div>
+                        <a class="btn btn-primary" href="{{ route('page.a', ['token' => $link->token]) }}">Unique Url</a>
+                    </div>
 
-                    {{ __('You are logged in!') }}
                 </div>
             </div>
         </div>

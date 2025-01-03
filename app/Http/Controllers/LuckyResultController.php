@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\LuckyResult;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class LuckyResultController extends Controller
 {
-    public function imFeelingLucky(Request $request, $token)
+    public function imFeelingLucky(Request $request, $token): RedirectResponse
     {
         $link = Link::query()->where('token', $token)->firstOrFail();
         $user = $link->user;
@@ -29,16 +31,16 @@ class LuckyResultController extends Controller
             }
         }
 
-        $result = LuckyResult::query()->create([
+        $link = LuckyResult::query()->create([
             'user_id' => $user->id,
             'random_number' => $randomNumber,
             'result' => $isWin ? 'Win' : 'Lose',
             'win_amount' => $winAmount,
         ]);
 
-        return response()->json([
-            'result' => $result,
-        ]);
+        return redirect()->back()
+            ->with('result', $link->result)
+            ->with('winAmount', $link->win_amount);
     }
 
     public function history($token)

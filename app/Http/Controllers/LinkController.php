@@ -34,7 +34,7 @@ class LinkController extends Controller
 
         return redirect()->route('page.a', [
             'token' => $newToken,
-        ]);
+        ])->with('linkGenerated', 'Link generated successfully');
     }
 
     public function deactivate($token)
