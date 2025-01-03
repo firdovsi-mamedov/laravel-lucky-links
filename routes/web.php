@@ -24,3 +24,5 @@ Route::middleware('check_link')->group(function () {
     // History
     Route::get('/page-a/{token}/history', [LuckyResultController::class, 'history'])->name('lucky.history');
 });
+
+Route::redirect('/login', '/register');

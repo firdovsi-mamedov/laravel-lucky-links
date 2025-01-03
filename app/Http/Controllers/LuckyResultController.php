@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\LuckyResult;
-use Illuminate\Http\JsonResponse;
+use App\Services\RandomNumberGameService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class LuckyResultController extends Controller
 {
+    public function __construct(private readonly RandomNumberGameService $randomNumberGameService)
+    {
+    }
+
     public function imFeelingLucky(Request $request, $token): RedirectResponse
     {
         $link = Link::query()->where('token', $token)->firstOrFail();
@@ -17,19 +21,10 @@ class LuckyResultController extends Controller
 
         $randomNumber = rand(1, 1000);
         $isWin = $randomNumber % 2 === 0;
-        $winAmount = 0;
 
-        if ($isWin) {
-            if ($randomNumber > 900) {
-                $winAmount = $randomNumber * 0.7;
-            } elseif ($randomNumber > 600) {
-                $winAmount = $randomNumber * 0.5;
-            } elseif ($randomNumber > 300) {
-                $winAmount = $randomNumber * 0.3;
-            } else {
-                $winAmount = $randomNumber * 0.1;
-            }
-        }
+        $winAmount = $isWin ? $this
+            ->randomNumberGameService
+            ->calculateWithAmount($randomNumber) : 0;
 
         $link = LuckyResult::query()->create([
             'user_id' => $user->id,

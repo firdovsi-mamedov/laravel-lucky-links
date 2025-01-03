@@ -17,10 +17,13 @@ class CheckLinkMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->route('token');
-        $link = Link::query()->where('token', $token)->where('active', true)->first();
+        $link = Link::query()->where('token', $token)
+            ->where('active', true)
+            ->where('user_id', auth()->id())
+            ->first();
 
         if (!$link || $link->expires_at->isPast()) {
-            return response('Ссылка недействительна или срок её действия истёк.', 403);
+            return response('The link is invalid or has expired.', 403);
         }
 
         return $next($request);

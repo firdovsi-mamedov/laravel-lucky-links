@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Link;
 use App\Models\User;
+use App\Services\TokenGeneratorService;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,7 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(private readonly TokenGeneratorService $tokenGeneratorService)
     {
         $this->middleware('guest');
     }
@@ -64,18 +65,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::query()->create([
+        return User::query()->create([
             'username' => $data['username'],
             'phone_number' => $data['phone_number'],
         ]);
-
-
-        return $user;
     }
 
     public function registered(Request $request): void
     {
-        $token = Str::random(32);
+        $token = $this->tokenGeneratorService->generateToken();
 
         Link::query()->create([
             'user_id' => $request->user()->id,
