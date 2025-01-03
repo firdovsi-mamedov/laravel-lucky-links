@@ -32,7 +32,9 @@ class LinkController extends Controller
             'expires_at' => now()->addDays(7),
         ]);
 
-        return redirect()->route('page.a', ['token' => $newToken]);
+        return redirect()->route('page.a', [
+            'token' => $newToken,
+        ]);
     }
 
     public function deactivate($token)

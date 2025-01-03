@@ -21,4 +21,11 @@ class Link extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function casts()
+    {
+        return [
+            'expires_at' => 'datetime'
+        ];
+    }
 }
