@@ -36,7 +36,9 @@ class LuckyResultController extends Controller
             'win_amount' => $winAmount,
         ]);
 
-        return view('lucky_result', compact('result'));
+        return response()->json([
+            'result' => $result,
+        ]);
     }
 
     public function history($token)
